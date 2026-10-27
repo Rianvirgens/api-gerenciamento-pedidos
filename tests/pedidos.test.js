@@ -155,4 +155,50 @@ describe('API de Gerenciamento de Pedidos', () => {
       expect(resposta.body).toHaveProperty('erro');
     });
   });
+
+  describe('DELETE /pedidos/:id', () => {
+    it('deve excluir um pedido existente com HTTP 200', async () => {
+      await request(app).post('/pedidos').send({
+        cliente: 'Lucas Ramos',
+        tipo: 'entrega',
+        valor: 150,
+        prioridade: 'baixa'
+      });
+
+      const resposta = await request(app).delete('/pedidos/1');
+      expect(resposta.status).toBe(200);
+      expect(resposta.body).toHaveProperty('mensagem');
+
+      const buscaAposExclusao = await request(app).get('/pedidos/1');
+      expect(buscaAposExclusao.status).toBe(404);
+    });
+
+    it('deve retornar HTTP 404 ao tentar excluir pedido inexistente', async () => {
+      const resposta = await request(app).delete('/pedidos/999');
+      expect(resposta.status).toBe(404);
+      expect(resposta.body).toHaveProperty('erro');
+    });
+  });
+
+  describe('GET /pedidos com filtros', () => {
+    it('deve filtrar pedidos por status e prioridade', async () => {
+      await request(app).post('/pedidos').send({
+        cliente: 'Pedido 1',
+        tipo: 'entrega',
+        valor: 100,
+        prioridade: 'alta'
+      });
+      await request(app).post('/pedidos').send({
+        cliente: 'Pedido 2',
+        tipo: 'retirada',
+        valor: 200,
+        prioridade: 'baixa'
+      });
+
+      const respostaFiltrada = await request(app).get('/pedidos?prioridade=alta');
+      expect(respostaFiltrada.status).toBe(200);
+      expect(respostaFiltrada.body).toHaveLength(1);
+      expect(respostaFiltrada.body[0].cliente).toBe('Pedido 1');
+    });
+  });
 });

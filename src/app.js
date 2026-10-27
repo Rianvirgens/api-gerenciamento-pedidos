@@ -1,9 +1,24 @@
 const express = require('express');
+const path = require('path');
 const pedidosRoutes = require('./routes/pedidosRoutes');
 
 const app = express();
 
+// Middleware de CORS para permitir requisicoes de navegadores e clientes externos
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 app.use(express.json());
+
+// Servir os arquivos estaticos da interface web (public)
+app.use(express.static(path.join(__dirname, '../public')));
 
 app.use('/pedidos', pedidosRoutes);
 

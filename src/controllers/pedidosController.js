@@ -11,7 +11,7 @@ function criar(req, res, next) {
 
 function listar(req, res, next) {
   try {
-    const lista = pedidosService.listarPedidos();
+    const lista = pedidosService.listarPedidos(req.query);
     return res.status(200).json(lista);
   } catch (erro) {
     return next(erro);
@@ -36,9 +36,19 @@ function atualizarStatus(req, res, next) {
   }
 }
 
+function excluir(req, res, next) {
+  try {
+    const pedidoExcluido = pedidosService.excluirPedido(req.params.id);
+    return res.status(200).json({ mensagem: 'Pedido excluido com sucesso.', pedido: pedidoExcluido });
+  } catch (erro) {
+    return next(erro);
+  }
+}
+
 module.exports = {
   criar,
   listar,
   buscarPorId,
-  atualizarStatus
+  atualizarStatus,
+  excluir
 };

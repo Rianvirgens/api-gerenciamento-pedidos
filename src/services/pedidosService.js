@@ -69,8 +69,29 @@ function cadastrarPedido(dados) {
   return novoPedido;
 }
 
-function listarPedidos() {
-  return pedidos;
+function listarPedidos(filtros = {}) {
+  let resultado = pedidos;
+
+  if (filtros.status) {
+    resultado = resultado.filter((p) => p.status.toLowerCase() === String(filtros.status).toLowerCase().trim());
+  }
+
+  if (filtros.tipo) {
+    resultado = resultado.filter((p) => p.tipo.toLowerCase() === String(filtros.tipo).toLowerCase().trim());
+  }
+
+  if (filtros.prioridade) {
+    resultado = resultado.filter((p) => p.prioridade.toLowerCase() === String(filtros.prioridade).toLowerCase().trim());
+  }
+
+  if (filtros.busca) {
+    const termo = String(filtros.busca).toLowerCase().trim();
+    resultado = resultado.filter((p) =>
+      p.cliente.toLowerCase().includes(termo) || String(p.id) === termo
+    );
+  }
+
+  return resultado;
 }
 
 function buscarPedidoPorId(idParam) {
@@ -111,6 +132,12 @@ function atualizarStatusPedido(idParam, corpo) {
   return pedido;
 }
 
+function excluirPedido(idParam) {
+  const pedido = buscarPedidoPorId(idParam);
+  pedidos = pedidos.filter((item) => item.id !== pedido.id);
+  return pedido;
+}
+
 // Funcao auxiliar usada nos testes automatizados para limpar a memoria entre os cenarios
 function limparPedidos() {
   pedidos = [];
@@ -122,6 +149,7 @@ module.exports = {
   listarPedidos,
   buscarPedidoPorId,
   atualizarStatusPedido,
+  excluirPedido,
   limparPedidos,
   TIPOS_VALIDOS,
   PRIORIDADES_VALIDAS,

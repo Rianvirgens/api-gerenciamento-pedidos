@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerenciamento de Pedidos</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Gerenciamento de Pedidos</h1>
+    <span>Rian Santo das Virgens - RGM 45370231</span>
+  </header>
+
+  <main>
+    <section class="painel">
+      <h2>Novo pedido</h2>
+      <form id="formPedido">
+        <label>Cliente
+          <input type="text" id="cliente" autocomplete="off">
+        </label>
+        <label>Tipo
+          <select id="tipo">
+            <option value="entrega">Entrega</option>
+            <option value="retirada">Retirada</option>
+          </select>
+        </label>
+        <label>Valor (R$)
+          <input type="number" id="valor" step="0.01">
+        </label>
+        <label>Prioridade
+          <select id="prioridade">
+            <option value="baixa">Baixa</option>
+            <option value="normal" selected>Normal</option>
+            <option value="alta">Alta</option>
+          </select>
+        </label>
+        <button type="submit">Cadastrar</button>
+      </form>
+      <p id="mensagem" class="mensagem"></p>
+    </section>
+
+    <section class="painel">
+      <div class="topo-lista">
+        <h2>Pedidos</h2>
+        <div class="filtros">
+          <input type="text" id="busca" placeholder="Buscar cliente ou ID">
+          <select id="filtroStatus">
+            <option value="">Todos os status</option>
+            <option value="recebido">Recebido</option>
+            <option value="em_preparacao">Em preparação</option>
+            <option value="enviado">Enviado</option>
+            <option value="entregue">Entregue</option>
+            <option value="cancelado">Cancelado</option>
+          </select>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Tipo</th>
+            <th>Prioridade</th>
+            <th>Valor</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="lista"></tbody>
+      </table>
+      <p id="vazio" class="vazio">Nenhum pedido encontrado.</p>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
